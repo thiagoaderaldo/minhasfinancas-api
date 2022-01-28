@@ -1,9 +1,12 @@
 package com.tal.minhasfinancas.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.tal.minhasfinancas.model.entity.Usuario;
 import com.tal.minhasfinancas.model.repository.UsuarioRepository;
 import com.tal.minhasfinancas.service.UsuarioService;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService{
 
 	private UsuarioRepository usuarioRepository;
