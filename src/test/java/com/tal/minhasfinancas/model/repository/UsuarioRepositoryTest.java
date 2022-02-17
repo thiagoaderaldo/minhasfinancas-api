@@ -1,5 +1,7 @@
 package com.tal.minhasfinancas.model.repository;
 
+import java.util.Optional;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +32,7 @@ public class UsuarioRepositoryTest {
 	public void verificarAExistenciaDeUmEmail() {
 		
 		//cenário
-		Usuario usuario = Usuario.builder().nome("usuario").email("usuario@email.com").build();
+		Usuario usuario = criarUsuario();
 //		usuarioRepository.save(usuario);
 		entityManager.persist(usuario);
 		
@@ -53,5 +55,47 @@ public class UsuarioRepositoryTest {
 		
 		//verificação
 		Assertions.assertThat(result).isFalse();
+	}
+	
+	@Test
+	public void devePersistirUmUsuarioNaBaseDeDados() {
+		
+		Usuario usuario = criarUsuario();
+		
+		Usuario usuarioSalvo = usuarioRepository.save(usuario);
+		
+		Assertions.assertThat(usuarioSalvo.getId()).isNotNull();		
+	}
+	
+	@Test
+	public void deveBuscarUmUsuarioPorEmail() {
+		
+		//cenário
+		Usuario usuario = criarUsuario();
+		entityManager.persist(usuario);
+		
+		//verificação
+		Optional<Usuario> result = usuarioRepository.findByEmail("usuario@email.com");
+		
+		Assertions.assertThat(result.isPresent()).isTrue();
+	}
+	
+	public void deveRetornarVazioAoBuscarUsuarioPorEmailQuandoNaoExisteNaBase() {
+		
+		//verificação
+		Optional<Usuario> result = usuarioRepository.findByEmail("usuario@email.com");
+		
+		Assertions.assertThat(result.isPresent()).isTrue();
+	}
+	
+	public static Usuario criarUsuario() {
+		
+		Usuario usuario = Usuario.builder()
+				.nome("usuario")
+				.email("usuario@email.com")
+				.senha("senha")
+				.build();
+		
+		return usuario;
 	}
 }
