@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,12 +23,16 @@ public class UsuarioRepositoryTest {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	TestEntityManager entityManager;
+	
 	@Test
 	public void verificarAExistenciaDeUmEmail() {
 		
 		//cenário
 		Usuario usuario = Usuario.builder().nome("usuario").email("usuario@email.com").build();
-		usuarioRepository.save(usuario);
+//		usuarioRepository.save(usuario);
+		entityManager.persist(usuario);
 		
 		//ação /execução
 		boolean result = usuarioRepository.existsByEmail("usuario@email.com");
@@ -41,7 +46,7 @@ public class UsuarioRepositoryTest {
 	public void deveRetornarFalsoQuandoNaoHouverUsuarioCadastradoComOEmail(){
 		
 		//cenário
-		usuarioRepository.deleteAll();
+//		usuarioRepository.deleteAll();
 		
 		//acão
 		boolean result = usuarioRepository.existsByEmail("usuario@email.com");
