@@ -1,6 +1,9 @@
 package com.tal.minhasfinancas.service;
 
 
+import java.util.Optional;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +36,22 @@ public class UsuarioServiceTest {
 		
 //		repository = Mockito.mock(UsuarioRepository.class);
 		service = new UsuarioServiceImpl(repository);
+	}
+	
+	public void deveAutenticarUmUsuarioComSucesso() {
+		
+		//cenário
+		String email = "email@email.com";
+		String senha = "senha";
+		
+		Usuario usuario = Usuario.builder().email(email).senha(senha).id(1l).build();
+		Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
+		
+		//ação
+		Usuario result = service.autenticar(email, senha);
+		
+		//verificação
+		Assertions.assertThat(result).isNotNull();
 	}
 
 	@Test(expected = Test.None.class)
