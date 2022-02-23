@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,13 +24,14 @@ public class UsuarioServiceTest {
 	@Autowired
 	UsuarioService service;
 	
-	@Autowired
+//	@Autowired
+	@MockBean
 	UsuarioRepository repository;
 	
 	@Before
 	public void setUp() {
 		
-		repository = Mockito.mock(UsuarioRepository.class);
+//		repository = Mockito.mock(UsuarioRepository.class);
 		service = new UsuarioServiceImpl(repository);
 	}
 
