@@ -38,6 +38,7 @@ public class UsuarioServiceTest {
 		service = new UsuarioServiceImpl(repository);
 	}
 	
+	@Test(expected = Test.None.class)
 	public void deveAutenticarUmUsuarioComSucesso() {
 		
 		//cenário
