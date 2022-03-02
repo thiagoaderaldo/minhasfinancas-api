@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.tal.minhasfinancas.exception.ErroAutenticacao;
 import com.tal.minhasfinancas.exception.RegraNegocioException;
 import com.tal.minhasfinancas.model.entity.Usuario;
 import com.tal.minhasfinancas.model.repository.UsuarioRepository;
@@ -76,6 +77,16 @@ public class UsuarioServiceTest {
 		
 		//ação
 		service.validarEmail("email@email.com");
+	}
+	
+	@Test(expected = ErroAutenticacao.class)
+	public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComOEmailInformado() {
+		
+		//cenário
+		Mockito.when(repository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		//ação
+		service.autenticar("email@email.com", "senha");
 	}
 	
 }
