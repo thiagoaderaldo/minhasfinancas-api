@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -25,18 +26,46 @@ import com.tal.minhasfinancas.service.impl.UsuarioServiceImpl;
 @ActiveProfiles("test")
 public class UsuarioServiceTest {
 
-	@Autowired
-	UsuarioService service;
+//	@Autowired
+//	UsuarioService service;
+	
+	@SpyBean
+	UsuarioServiceImpl service;
 	
 //	@Autowired
 	@MockBean
 	UsuarioRepository repository;
 	
-	@Before
-	public void setUp() {
+//	@Before
+//	public void setUp() {
+//		
+////		repository = Mockito.mock(UsuarioRepository.class);
+//		service = new UsuarioServiceImpl(repository);
+//	}
+	
+	@Test(expected = Test.None.class)
+	public void deveSalvarUmUsuario() {
 		
-//		repository = Mockito.mock(UsuarioRepository.class);
-		service = new UsuarioServiceImpl(repository);
+		//cenário
+		Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
+		Usuario usuario = Usuario.builder()
+				.id(1l)
+				.nome("nome")
+				.email("email@email.com")
+				.senha("senha")
+				.build();
+		
+		Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
+		
+		//ação
+		Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
+		
+		//verificação
+		Assertions.assertThat(usuarioSalvo).isNotNull();
+		Assertions.assertThat(usuarioSalvo.getId()).isEqualTo(1l);
+		Assertions.assertThat(usuarioSalvo.getNome()).isEqualTo("nome");
+		Assertions.assertThat(usuarioSalvo.getEmail()).isEqualTo("email@email.com");
+		Assertions.assertThat(usuarioSalvo.getSenha()).isEqualTo("senha");
 	}
 	
 	@Test(expected = Test.None.class)
