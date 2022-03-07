@@ -19,6 +19,11 @@ public class UsuarioResource {
 	
 	private UsuarioService service;
 	
+	public UsuarioResource(UsuarioService service) {
+		
+		this.service = service;
+	}
+	
 	@PostMapping
 	public ResponseEntity salvar( @RequestBody UsuarioDTO dto) {
 		
