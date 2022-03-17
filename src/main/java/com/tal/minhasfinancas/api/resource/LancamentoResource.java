@@ -27,17 +27,21 @@ import com.tal.minhasfinancas.model.enums.TipoLancamento;
 import com.tal.minhasfinancas.service.LancamentoService;
 import com.tal.minhasfinancas.service.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/lancamentos")
+@RequiredArgsConstructor
 public class LancamentoResource {
 
-	private LancamentoService service;
-	private UsuarioService uService;
+	private final LancamentoService service;
+	private final UsuarioService uService;
 
-	public LancamentoResource(LancamentoService service) {
-		
-		this.service = service;
-	}
+//	public LancamentoResource(LancamentoService service, UsuarioService uService) {
+//		
+//		this.service = service;
+//		this.uService = uService;
+//	}
 	
 	@PostMapping
 	public ResponseEntity salvar( @RequestBody LancamentoDTO dto){
