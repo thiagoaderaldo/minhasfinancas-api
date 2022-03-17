@@ -130,12 +130,12 @@ public class LancamentoResource {
 		
 		lancamento.setUsuario(usuario);
 		
-		if(lancamento.getTipo() != null) {
+		if(dto.getTipo() != null) {
 
 			lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));	
 		}
 		
-		if(lancamento.getStatus() != null) {
+		if(dto.getStatus() != null) {
 
 			lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));	
 		}
