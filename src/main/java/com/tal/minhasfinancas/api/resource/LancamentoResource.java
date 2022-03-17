@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -63,6 +64,15 @@ public class LancamentoResource {
 			}
 		}).orElseGet(() ->
 				new ResponseEntity("Lançamento não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
+	}
+	
+	@DeleteMapping("{id}")
+	public ResponseEntity deletar(@PathVariable("id") Long id) {
+		
+		return service.obterPorId(id).map( entidade -> {
+			service.deletar(entidade);
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+		}).orElseGet(() -> new ResponseEntity("Lançamento não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
 	}
 	
 	private Lancamento converter(LancamentoDTO dto) {
