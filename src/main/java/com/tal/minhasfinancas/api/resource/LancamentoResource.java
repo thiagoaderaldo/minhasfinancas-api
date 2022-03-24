@@ -103,7 +103,7 @@ public class LancamentoResource {
 		
 		Optional<Usuario> usuario = uService.obterPorId(idUsuario);
 		
-		if(usuario.isPresent()) {
+		if(!usuario.isPresent()) {
 			
 			return ResponseEntity.badRequest().body("Não foi possível realizar a consulta. Usuário não encontrado para o Id informado");
 			
