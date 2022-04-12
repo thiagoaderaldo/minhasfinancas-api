@@ -76,7 +76,7 @@ public class LancamentoResource {
 				new ResponseEntity("Lançamento não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
 	}
 	
-	@PutMapping("{id}/atualiza-status")
+	@PutMapping("{id}/atualizar-status")
 	public ResponseEntity atualizarStatus(@PathVariable("id") Long id, @RequestBody AtualizaStatusDTO dto) {
 		return service.obterPorId(id).map(entity -> {
 			StatusLancamento statusSelecionado = StatusLancamento.valueOf(dto.getStatus());
