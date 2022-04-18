@@ -3,12 +3,16 @@ package com.tal.minhasfinancas.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -117,6 +121,28 @@ public class LancamentoServiceTest {
 		
 		//verificação
 		Mockito.verify(repository, Mockito.never()).delete(lancamento);
+	}
+	
+	@Test
+	public void deveFiltrarLancacmentos() {
+		
+		//cenário
+		Lancamento lancamento = LancamentoRepositoryTest.criarLancamento();
+		lancamento.setId(1l);
+		
+		List<Lancamento> lista = Arrays.asList(lancamento);
+		
+		Mockito.when(repository.findAll(Mockito.any(Example.class))).thenReturn(lista);
+		
+		//execução
+		List<Lancamento> resultado = service.buscar(lancamento);
+		
+		//verificações
+		Assertions
+			.assertThat(resultado)
+			.isNotEmpty()
+			.hasSize(1)
+			.contains(lancamento);
 	}
 	
 }
