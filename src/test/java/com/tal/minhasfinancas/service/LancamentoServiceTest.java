@@ -59,4 +59,37 @@ public class LancamentoServiceTest {
 		Assertions.catchThrowableOfType(() -> service.salvar(lancamentoASalvar), RegraNegocioException.class);
 		Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
 	}
+	
+	@Test
+	public void deveAtualizarUmLancamento() {
+		
+		//cenário
+		Lancamento lancamentoSalvo = LancamentoRepositoryTest.criarLancamento();
+		lancamentoSalvo.setId(1l);
+		lancamentoSalvo.setStatus(StatusLancamento.PENDENTE);
+		
+		Mockito.doNothing().when(service).validar(lancamentoSalvo);
+		
+
+		Mockito.when(repository.save(lancamentoSalvo)).thenReturn(lancamentoSalvo);
+		
+		//execução
+		service.atualizar(lancamentoSalvo);
+		
+		//verificação
+		Mockito.verify(repository, Mockito.times(1)).save(lancamentoSalvo);
+	}
+	
+	@Test
+	public void deveLancarErroAoTentarAtualizarUmLancamentoQueAindaNaoFoiSalvo() {
+		
+		//cenário
+		Lancamento lancamentoASalvar = LancamentoRepositoryTest.criarLancamento();
+		
+		//execução e verificação
+		Assertions.catchThrowableOfType(() -> service.atualizar(lancamentoASalvar), NullPointerException.class);
+		Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
+	}
+	
+	
 }
