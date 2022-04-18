@@ -1,6 +1,7 @@
 package com.tal.minhasfinancas.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ public class LancamentoServiceTest {
 		Mockito.doThrow(RegraNegocioException.class).when(service).validar(lancamentoASalvar);
 		
 		//execucao e verificação
-		Assertions.catchThrowableOfType(() -> service.salvar(lancamentoASalvar), RegraNegocioException.class);
+		catchThrowableOfType(() -> service.salvar(lancamentoASalvar), RegraNegocioException.class);
 		Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
 	}
 	
@@ -87,9 +88,35 @@ public class LancamentoServiceTest {
 		Lancamento lancamentoASalvar = LancamentoRepositoryTest.criarLancamento();
 		
 		//execução e verificação
-		Assertions.catchThrowableOfType(() -> service.atualizar(lancamentoASalvar), NullPointerException.class);
+		catchThrowableOfType(() -> service.atualizar(lancamentoASalvar), NullPointerException.class);
 		Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
 	}
 	
+	@Test
+	public void deveDeletarUmLancamento() {
+		
+		//cenário
+		Lancamento lancamento = LancamentoRepositoryTest.criarLancamento();
+		lancamento.setId(1l);
+		
+		//execução
+		service.deletar(lancamento);
+		
+		//verificação
+		Mockito.verify(repository).delete(lancamento);
+	}
+	
+	@Test
+	public void deveLancarErroAoTentarDeletarUmLancamentoQueAindaNaoFoiSalvo() {
+		
+		//cenário
+		Lancamento lancamento = LancamentoRepositoryTest.criarLancamento();
+		
+		//execução
+		catchThrowableOfType(() -> service.deletar(lancamento), NullPointerException.class);
+		
+		//verificação
+		Mockito.verify(repository, Mockito.never()).delete(lancamento);
+	}
 	
 }
