@@ -2,6 +2,7 @@ package com.tal.minhasfinancas.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.tal.minhasfinancas.exception.RegraNegocioException;
 import com.tal.minhasfinancas.model.entity.Lancamento;
 import com.tal.minhasfinancas.model.enums.StatusLancamento;
 import com.tal.minhasfinancas.model.repository.LancamentoRepository;
@@ -44,5 +46,17 @@ public class LancamentoServiceTest {
 		//verificação
 		assertThat(lancamento.getId()).isEqualTo(lancamentoSalvo.getId());
 		assertThat(lancamento.getStatus()).isEqualTo(lancamentoSalvo.getStatus());
+	}
+	
+	@Test
+	public void naoDeveSalvarUmLancamentoQuandoHouverErroDeValidacao() {
+		
+		//cenário
+		Lancamento lancamentoASalvar = LancamentoRepositoryTest.criarLancamento();
+		Mockito.doThrow(RegraNegocioException.class).when(service).validar(lancamentoASalvar);
+		
+		//execucao e verificação
+		Assertions.catchThrowableOfType(() -> service.salvar(lancamentoASalvar), RegraNegocioException.class);
+		Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
 	}
 }
