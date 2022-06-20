@@ -35,5 +35,3 @@ build/
 # Ignoring directories
 bin/
 .settings/
-src/main/resources/application.properties
-pom.xml
