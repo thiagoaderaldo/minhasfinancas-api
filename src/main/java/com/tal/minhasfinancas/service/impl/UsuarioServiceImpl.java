@@ -33,7 +33,8 @@ public class UsuarioServiceImpl implements UsuarioService{
 			throw new ErroAutenticacao("Senha inválida.");
 		}
 		
-		return null;
+//		return null;
+		return usuario.get();
 	}
 
 	@Override
